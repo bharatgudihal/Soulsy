@@ -5,7 +5,7 @@ using UnityEngine;
 public class CheckLeftJoystick : MonoBehaviour{
 
     [Range(0,1)]
-    public  float walkValue;
+    public  float threshold;
 
     public enum Comparison
     {
@@ -22,22 +22,22 @@ public class CheckLeftJoystick : MonoBehaviour{
     private bool LeftJoystickXaxisValue()
     {
         if(type == Comparison.Equal)
-            return ControllerInput.GetLeftAnalogStickXValue() == walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() == threshold;
 
         if (type == Comparison.NotEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() != walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() != threshold;
 
         if(type == Comparison.Greater)
-            return ControllerInput.GetLeftAnalogStickXValue() > walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() > threshold;
 
         if (type == Comparison.GreaterEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() >= walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() >= threshold;
 
         if (type == Comparison.Lower)
-            return ControllerInput.GetLeftAnalogStickXValue() < walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() < threshold;
 
         if (type == Comparison.LowerEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() <= walkValue;
+            return ControllerInput.GetLeftAnalogStickXValue() <= threshold;
 
         else
             return true;
