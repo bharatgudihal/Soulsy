@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Condition : MonoBehaviour {
-    
-    public State transitionTo;
+public class Idle : State
+{
 
 	// Use this for initialization
 	void Start () {
@@ -15,6 +14,4 @@ public abstract class Condition : MonoBehaviour {
 	void Update () {
 		
 	}
-
-    public abstract bool Check(GameObject gameObject, Effect effect, Stats stat);
 }

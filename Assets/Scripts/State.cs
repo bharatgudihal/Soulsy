@@ -1,16 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class State : MonoBehaviour {
+public class State:MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    [SerializeField]
+    private List<Condition> UpdateConditions;
+
+    [SerializeField]
+    private List<Condition> OverLapConditions;
+
+    [SerializeField]
+    private float overLapSphereRadius;
+
+    [SerializeField]
+    private List<Effect> effects;
+
+    [SerializeField]
+    private Stats stats;
+   
 }
