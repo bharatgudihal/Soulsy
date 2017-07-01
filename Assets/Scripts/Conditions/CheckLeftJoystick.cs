@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckLeftJoystick : MonoBehaviour{
+public class CheckLeftJoystick : Condition{
 
     [Range(0,1)]
     public  float threshold;
@@ -40,6 +41,11 @@ public class CheckLeftJoystick : MonoBehaviour{
             return ControllerInput.GetLeftAnalogStickXValue() <= threshold;
 
         else
-            return true;
+            return false;
+    }
+
+    public override bool Check(GameObject gameObject, GameObject other, List<Effect> effects, Stats stats)
+    {
+        return LeftJoystickXaxisValue();
     }
 }

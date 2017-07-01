@@ -5,7 +5,7 @@ using UnityEngine;
 
 public abstract class Condition : MonoBehaviour {
     
-    public Type transitionTo;
+    public State transitionTo;
 
 	// Use this for initialization
 	void Start () {

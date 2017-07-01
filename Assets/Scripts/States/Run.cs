@@ -9,13 +9,18 @@ public class Run : State {
     // Use this for initialization
     void Start()
     {
+        stats = GetComponent<Stats>();
         runVect = new Vector2(GetComponent<Stats>().runSpeed, 0.0f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckConditions();
+        Condition condition = CheckConditions();
+        if (condition != null)
+        {
+            SwitchState(condition.transitionTo);
+        }
         float direction = Mathf.Sign(ControllerInput.GetLeftAnalogStickXValue());
         transform.Translate(runVect * direction);
 

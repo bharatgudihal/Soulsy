@@ -15,8 +15,9 @@ public class State:MonoBehaviour {
     [SerializeField]
     private float overLapSphereRadius;
 
-    [SerializeField]
-    private Stats stats;
+    protected Stats stats;
+
+
 
     protected Condition CheckConditions()
     {
@@ -34,13 +35,13 @@ public class State:MonoBehaviour {
                         break;
                     }                    
                 }
-                if (triggerCondition)
+                if (triggerCondition != null)
                 {
                     break;
                 }
             }
         }
-        if (!triggerCondition)
+        if (triggerCondition == null)
         {
             foreach(Condition updateCondition in UpdateConditions)
             {
@@ -54,4 +55,9 @@ public class State:MonoBehaviour {
         return triggerCondition;
     }
 
+    protected void SwitchState(State state)
+    {
+        state.enabled = true;
+        enabled = false;
+    }
 }

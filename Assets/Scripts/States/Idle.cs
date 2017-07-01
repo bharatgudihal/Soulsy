@@ -7,16 +7,15 @@ public class Idle : State
 
 	// Use this for initialization
 	void Start () {
-		
+        stats = GetComponent<Stats>(); 
 	}
 	
 	// Update is called once per frame
 	void Update () {
         Condition condition = CheckConditions();
-        if (condition)
+        if (condition != null)
         {
-            gameObject.AddComponent(condition.transitionTo);
-            Destroy(this);
+            SwitchState(condition.transitionTo);
         }
 	}
 }
