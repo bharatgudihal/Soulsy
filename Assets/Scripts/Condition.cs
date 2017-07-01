@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class Condition : MonoBehaviour {
     
-    public State transitionTo;
+    public Type transitionTo;
 
 	// Use this for initialization
 	void Start () {
@@ -16,5 +17,5 @@ public abstract class Condition : MonoBehaviour {
 		
 	}
 
-    public abstract bool Check(GameObject gameObject, Effect effect, Stats stat);
+    public abstract bool Check(GameObject gameObject, GameObject other, List<Effect> effects, Stats stats);
 }

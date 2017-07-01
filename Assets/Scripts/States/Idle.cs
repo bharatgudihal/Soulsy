@@ -12,6 +12,11 @@ public class Idle : State
 	
 	// Update is called once per frame
 	void Update () {
-		
+        Condition condition = CheckConditions();
+        if (condition)
+        {
+            gameObject.AddComponent(condition.transitionTo);
+            Destroy(this);
+        }
 	}
 }
