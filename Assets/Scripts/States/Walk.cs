@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Walk : State {
 
-    [SerializeField]
-    private float walkingSpeed;
-
     private Vector2 walkVector;
 
     // Use this for initialization
     void Start() {
-        walkVector = new Vector2(walkingSpeed, 0f);
+        walkVector = new Vector2(GetComponent<Stats>().walkSpeed, 0f);
     }
 
     // Update is called once per frame
