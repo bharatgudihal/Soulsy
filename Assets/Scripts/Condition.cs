@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Condition : MonoBehaviour {
-    
-    public State transitionTo;
+public abstract class Condition : ScriptableObject {
 
 	// Use this for initialization
 	void Start () {

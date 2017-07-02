@@ -15,14 +15,15 @@ public class Walk : State {
     // Update is called once per frame
     void Update() {
 
-        Condition condition = CheckConditions();
+        TransitionUnit condition = CheckConditions();
         if (condition != null)
         {
-            SwitchState(condition.transitionTo);
+            SwitchState(condition.state);
         }
-        float value = ControllerInput.GetLeftAnalogStickXValue();
-        transform.Translate(walkVector * value);
-
-
+        else
+        {
+            float value = ControllerInput.GetLeftAnalogStickXValue();
+            transform.Translate(walkVector * value);
+        }
     }
 }

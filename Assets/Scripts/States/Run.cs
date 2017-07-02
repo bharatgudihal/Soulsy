@@ -16,13 +16,15 @@ public class Run : State {
     // Update is called once per frame
     void Update()
     {
-        Condition condition = CheckConditions();
+        TransitionUnit condition = CheckConditions();
         if (condition != null)
         {
-            SwitchState(condition.transitionTo);
+            SwitchState(condition.state);
         }
-        float direction = Mathf.Sign(ControllerInput.GetLeftAnalogStickXValue());
-        transform.Translate(runVect * direction);
-
+        else
+        {
+            float direction = Mathf.Sign(ControllerInput.GetLeftAnalogStickXValue());
+            transform.Translate(runVect * direction);
+        }
     }
 }

@@ -1,13 +1,21 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System;
+
+[Serializable]
+public class TransitionUnit
+{
+    public Condition condition;
+    public State state;
+}
 
 public class State:MonoBehaviour {
 
     [SerializeField]
-    private List<Condition> UpdateConditions;
+    private List<TransitionUnit> UpdateConditions;
 
     [SerializeField]
-    private List<Condition> OverLapConditions;
+    private List<TransitionUnit> OverLapConditions;
     
     [SerializeField]
     private List<Effect> effects;
@@ -19,17 +27,17 @@ public class State:MonoBehaviour {
 
 
 
-    protected Condition CheckConditions()
+    protected TransitionUnit CheckConditions()
     {
-        Condition triggerCondition = null;
+        TransitionUnit triggerCondition = null;
         Collider[] colliders = Physics.OverlapSphere(transform.position, overLapSphereRadius);
         if(colliders.Length > 0)
         {
-            foreach (Condition overlapCondition in OverLapConditions)
+            foreach (TransitionUnit overlapCondition in OverLapConditions)
             {
                 foreach (Collider collider in colliders)
                 {
-                    if(overlapCondition.Check(gameObject, collider.gameObject, effects, stats))
+                    if(overlapCondition.condition.Check(gameObject, collider.gameObject, effects, stats))
                     {
                         triggerCondition = overlapCondition;
                         break;
@@ -43,9 +51,9 @@ public class State:MonoBehaviour {
         }
         if (triggerCondition == null)
         {
-            foreach(Condition updateCondition in UpdateConditions)
+            foreach(TransitionUnit updateCondition in UpdateConditions)
             {
-                if(updateCondition.Check(gameObject, null, effects, stats))
+                if(updateCondition.condition.Check(gameObject, null, effects, stats))
                 {
                     triggerCondition = updateCondition;
                     break;

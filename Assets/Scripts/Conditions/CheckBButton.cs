@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu()]
 public class CheckBButton : Condition {
 
     public enum Comparison
