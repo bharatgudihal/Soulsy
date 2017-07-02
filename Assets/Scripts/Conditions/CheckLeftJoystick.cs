@@ -24,22 +24,22 @@ public class CheckLeftJoystick : Condition{
     private bool LeftJoystickXaxisValue()
     {
         if(type == Comparison.Equal)
-            return ControllerInput.GetLeftAnalogStickXValue() == threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) == threshold;
 
         if (type == Comparison.NotEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() != threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) != threshold;
 
         if(type == Comparison.Greater)
-            return ControllerInput.GetLeftAnalogStickXValue() > threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) > threshold;
 
         if (type == Comparison.GreaterEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() >= threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) >= threshold;
 
         if (type == Comparison.Lower)
-            return ControllerInput.GetLeftAnalogStickXValue() < threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) < threshold;
 
         if (type == Comparison.LowerEqual)
-            return ControllerInput.GetLeftAnalogStickXValue() <= threshold;
+            return Mathf.Abs(ControllerInput.GetLeftAnalogStickXValue()) <= threshold;
 
         else
             return false;
