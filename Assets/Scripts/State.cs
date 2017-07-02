@@ -2,12 +2,7 @@
 using UnityEngine;
 using System;
 
-[Serializable]
-public class TransitionUnit
-{
-    public Condition condition;
-    public State state;
-}
+
 
 public class State:MonoBehaviour {
 
@@ -37,7 +32,7 @@ public class State:MonoBehaviour {
             {
                 foreach (Collider collider in colliders)
                 {
-                    if(overlapCondition.condition.Check(gameObject, collider.gameObject, effects, stats))
+                    if(overlapCondition.condition.Check(gameObject, collider.gameObject, effects, stats) ^ overlapCondition.checkNegative)
                     {
                         triggerCondition = overlapCondition;
                         break;
@@ -53,7 +48,7 @@ public class State:MonoBehaviour {
         {
             foreach(TransitionUnit updateCondition in UpdateConditions)
             {
-                if(updateCondition.condition.Check(gameObject, null, effects, stats))
+                if(updateCondition.condition.Check(gameObject, null, effects, stats) ^ updateCondition.checkNegative)
                 {
                     triggerCondition = updateCondition;
                     break;

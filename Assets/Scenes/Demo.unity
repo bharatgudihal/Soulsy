@@ -213,6 +213,7 @@ MonoBehaviour:
   UpdateConditions:
   - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1069852273}
+    checkNegative: 0
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -228,8 +229,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateConditions:
-  - condition: {fileID: 11400000, guid: 258d61eb25684104c936034eb55f953a, type: 2}
+  - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1069852271}
+    checkNegative: 1
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
