@@ -22,7 +22,7 @@ public class State:MonoBehaviour {
 
 
 
-    protected TransitionUnit CheckConditions()
+    protected TransitionUnit CheckConditions(GameObject other = null)
     {
         TransitionUnit triggerCondition = null;
         Collider[] colliders = Physics.OverlapSphere(transform.position, overLapSphereRadius);
@@ -48,7 +48,7 @@ public class State:MonoBehaviour {
         {
             foreach(TransitionUnit updateCondition in UpdateConditions)
             {
-                if(updateCondition.condition.Check(gameObject, null, effects, stats) ^ updateCondition.checkNegative)
+                if(updateCondition.condition.Check(gameObject, other, effects, stats) ^ updateCondition.checkNegative)
                 {
                     triggerCondition = updateCondition;
                     break;
