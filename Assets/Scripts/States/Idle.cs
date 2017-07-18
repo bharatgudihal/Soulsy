@@ -12,10 +12,15 @@ public class Idle : State
 	
 	// Update is called once per frame
 	void Update () {
+        Debug.Log("Idle");
         TransitionUnit condition = CheckConditions();
         if (condition != null)
         {
             SwitchState(condition.state);
+        }
+        else
+        {
+            animator.Play("Idle");
         }
 	}
 }

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Comparison
+{
+    Pressed,
+    Released
+};
+
 public class ControllerInput{
 
     public static float GetLeftAnalogStickXValue()
@@ -9,10 +15,13 @@ public class ControllerInput{
         return Input.GetAxis("Walk");
     }
 
-    public static bool GetBButtonValue()
+    public static bool GetBButton()
     {
         return Input.GetButton("BButton");
     }
     
-     
+    public static bool GetRightBumperDown()
+    {
+        return Input.GetButtonDown("RightBumper");
+    }
 }

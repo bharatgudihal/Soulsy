@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 1069852271}
   - component: {fileID: 1069852273}
   - component: {fileID: 1069852272}
+  - component: {fileID: 1069852275}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -213,9 +214,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateConditions:
+  - condition: {fileID: 11400000, guid: 53c4089eec064ee438d5743461dee7d9, type: 2}
+    state: {fileID: 1069852275}
+    checkNegative: 0
+    priority: 0
   - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1069852273}
     checkNegative: 0
+    priority: 1
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -234,9 +240,11 @@ MonoBehaviour:
   - condition: {fileID: 11400000, guid: 3dbfde798d5cc894eae638d5a8d5c60f, type: 2}
     state: {fileID: 1069852273}
     checkNegative: 1
+    priority: 0
   - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1069852271}
     checkNegative: 1
+    priority: 0
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -255,9 +263,11 @@ MonoBehaviour:
   - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1069852271}
     checkNegative: 1
+    priority: 0
   - condition: {fileID: 11400000, guid: 3dbfde798d5cc894eae638d5a8d5c60f, type: 2}
     state: {fileID: 1069852272}
     checkNegative: 0
+    priority: 0
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -272,8 +282,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f339a5a7f3a366c4397fd343f2ae41f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 0.25
-  runSpeed: 0.5
+  walkSpeed: 0.125
+  runSpeed: 0.25
+--- !u!114 &1069852275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1069852267}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 754e7ae24788c8643920bf8f659b47d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  UpdateConditions:
+  - condition: {fileID: 11400000, guid: 12cfb6f3468cec74e80a83b0ad66b881, type: 2}
+    state: {fileID: 1069852271}
+    checkNegative: 0
+    priority: 0
+  OverLapConditions: []
+  effects: []
+  overLapSphereRadius: 0
 --- !u!1 &1752728762
 GameObject:
   m_ObjectHideFlags: 0

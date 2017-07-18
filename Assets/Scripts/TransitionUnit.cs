@@ -6,4 +6,5 @@ public class TransitionUnit
     public Condition condition;
     public State state;
     public bool checkNegative;
+    public int priority;
 }
