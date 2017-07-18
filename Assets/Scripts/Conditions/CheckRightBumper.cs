@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu()]
-public class CheckBButton : Condition {    
-
+public class CheckRightBumper : Condition
+{
     public Comparison type = Comparison.Pressed;
 
-    private bool BButtonValue()
+    private bool RightBumperValue()
     {
         if (type == Comparison.Pressed)
-            return ControllerInput.GetBButton() == true;
+            return ControllerInput.GetRightBumperDown() == true;
 
         if (type == Comparison.Released)
-            return ControllerInput.GetBButton() == false;
+            return ControllerInput.GetRightBumperDown() == false;
 
         else
             return false;
@@ -22,6 +21,6 @@ public class CheckBButton : Condition {
 
     public override bool Check(GameObject gameObject, GameObject other, List<Effect> effects, Stats stats)
     {
-        return BButtonValue();
+        return RightBumperValue();
     }
 }

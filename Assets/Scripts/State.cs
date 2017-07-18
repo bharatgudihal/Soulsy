@@ -7,7 +7,7 @@ using System;
 public class State:MonoBehaviour {
 
     [SerializeField]
-    private List<TransitionUnit> UpdateConditions;
+    public List<TransitionUnit> UpdateConditions;
 
     [SerializeField]
     private List<TransitionUnit> OverLapConditions;
@@ -20,7 +20,12 @@ public class State:MonoBehaviour {
 
     protected Stats stats;
 
+    protected Animator animator;
 
+    private void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     protected TransitionUnit CheckConditions(GameObject other = null)
     {
@@ -62,5 +67,23 @@ public class State:MonoBehaviour {
     {
         state.enabled = true;
         enabled = false;
+    }
+
+    public void Optimize()
+    {
+        TransitionUnit[] optimizedList = new TransitionUnit[UpdateConditions.Count];
+        foreach(TransitionUnit unit in UpdateConditions)
+        {
+            optimizedList[unit.priority] = unit;
+        }
+        UpdateConditions.Clear();
+        UpdateConditions.AddRange(optimizedList);
+        optimizedList = new TransitionUnit[OverLapConditions.Count];
+        foreach (TransitionUnit unit in OverLapConditions)
+        {
+            optimizedList[unit.priority] = unit;
+        }
+        OverLapConditions.Clear();
+        OverLapConditions.AddRange(optimizedList);
     }
 }
