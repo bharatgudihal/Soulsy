@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899004f3809d64a4c95ab4a7a6e6c195, type: 3}
   m_Name: VanillaEnemyWalkCondition
   m_EditorClassIdentifier: 
-  distance: 1
+  distance: 1000

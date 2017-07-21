@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a11768e5c1e0fa34aaa0e580f3c972d6, type: 3}
   m_Name: VanillaEnemyAttack
   m_EditorClassIdentifier: 
-  distance: 5
+  attackDistance: 0.8

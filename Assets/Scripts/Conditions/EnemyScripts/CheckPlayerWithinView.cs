@@ -7,14 +7,20 @@ public class CheckPlayerWithinView : Condition
 {
 
     [SerializeField]
-    float distance = 5.0f;
+    float distance;
 
+    LayerMask layerMask;
+
+    private void OnEnable()
+    {
+        layerMask = 1 << LayerMask.NameToLayer("Player");
+    }
 
     private bool PlayerInView(GameObject gameObject)
     {
-
-        RaycastHit2D hit = Physics2D.Raycast(gameObject.transform.position, Vector2.left,distance);
-        if (hit.collider != null && hit.collider.gameObject.name == "Player")
+        RaycastHit2D hit = Physics2D.Raycast(gameObject.transform.position, gameObject.transform.right, distance,layerMask);
+     
+        if (hit.collider != null)
         {
             return true;
         }
