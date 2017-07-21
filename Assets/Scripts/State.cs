@@ -4,7 +4,7 @@ using System;
 
 
 
-public class State:MonoBehaviour {
+public class State : MonoBehaviour {
 
     [SerializeField]
     public List<TransitionUnit> UpdateConditions;
@@ -25,6 +25,7 @@ public class State:MonoBehaviour {
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        stats = GetComponent<Stats>();
     }
 
     protected TransitionUnit CheckConditions(GameObject other = null)
