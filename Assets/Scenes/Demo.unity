@@ -309,7 +309,7 @@ MonoBehaviour:
   - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
     state: {fileID: 1935325278}
     checkNegative: 1
-    priority: 0
+    priority: 1
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -326,14 +326,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateConditions:
-  - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
-    state: {fileID: 1935325278}
-    checkNegative: 1
-    priority: 0
   - condition: {fileID: 11400000, guid: 3dbfde798d5cc894eae638d5a8d5c60f, type: 2}
     state: {fileID: 1935325276}
     checkNegative: 0
     priority: 0
+  - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
+    state: {fileID: 1935325278}
+    checkNegative: 1
+    priority: 1
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
@@ -350,14 +350,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UpdateConditions:
-  - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
-    state: {fileID: 1935325277}
-    checkNegative: 0
-    priority: 1
   - condition: {fileID: 11400000, guid: 53c4089eec064ee438d5743461dee7d9, type: 2}
     state: {fileID: 1935325275}
     checkNegative: 0
     priority: 0
+  - condition: {fileID: 11400000, guid: b445f12ecddabab40baa8b9b6d3bc500, type: 2}
+    state: {fileID: 1935325277}
+    checkNegative: 0
+    priority: 1
   OverLapConditions: []
   effects: []
   overLapSphereRadius: 0
