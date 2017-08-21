@@ -9,6 +9,7 @@ public class StateMachineWindow : EditorWindow {
     private List<Rect> stateBoxes;
     private int windowWidth = 100;
     private int windowHeight = 20;
+    private bool init = false;
 
     [MenuItem("Window/State Machine")]
     public static void ShowWindow()
@@ -32,6 +33,7 @@ public class StateMachineWindow : EditorWindow {
                 Rect rect = new Rect(100 + (2 * windowWidth * i), 50, windowWidth, windowHeight + windowHeight * states[i].UpdateConditions.Count);
                 stateBoxes.Add(rect);
             }
+            init = true;
         }
     }
 
@@ -42,23 +44,26 @@ public class StateMachineWindow : EditorWindow {
 
     private void OnGUI()
     {
-        //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows
-        for(int i = 0; i < states.Count; i++)
+        if (init)
         {
-            List<TransitionUnit> transitions = states[i].UpdateConditions;
-
-            foreach (TransitionUnit transition in transitions)
+            //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows
+            for (int i = 0; i < states.Count; i++)
             {
-                DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
-            }
-        }        
+                List<TransitionUnit> transitions = states[i].UpdateConditions;
 
-        BeginWindows();
-        for(int i = 0; i < stateBoxes.Count; i++)
-        {
-            stateBoxes[i] = GUI.Window(i, stateBoxes[i], DrawNodeWindow, states[i].GetType().Name);
+                foreach (TransitionUnit transition in transitions)
+                {
+                    DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                }
+            }
+
+            BeginWindows();
+            for (int i = 0; i < stateBoxes.Count; i++)
+            {
+                stateBoxes[i] = GUI.Window(i, stateBoxes[i], DrawNodeWindow, states[i].GetType().Name);
+            }
+            EndWindows();
         }
-        EndWindows();
     }
 
     void DrawNodeWindow(int id)
@@ -69,28 +74,18 @@ public class StateMachineWindow : EditorWindow {
     void DrawNodeCurve(Rect start, Rect end, int totalStates, int priority)
     {
         Rect rect = new Rect(start.x + start.width, start.y + (start.height / totalStates) * priority, 20, 20);
-        GUI.Button(rect, priority.ToString());
+        
         Vector3 startPos = new Vector3(rect.x + rect.width, rect.y + rect.height/2, 0);
         Vector3 endPos = new Vector3(end.x, end.y + end.height/2, 0);
+        
         Vector3 startTan = startPos + Vector3.right * 50;
         Vector3 endTan = endPos + Vector3.left * 50;
         Color shadowCol = new Color(0, 0, 0, 0.06f);
         for (int i = 0; i < 3; i++) // Draw a shadow
             Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
         Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, null, 1);
-    }
-
-    private Texture2D MakeTexture(int width, int height, Color col)
-    {
-        Color[] pix = new Color[width * height];
-        for (int i = 0; i < pix.Length; ++i)
-        {
-            pix[i] = col;
-        }
-        Texture2D result = new Texture2D(width, height);
-        result.SetPixels(pix);
-        result.Apply();
-        return result;
+        GUI.Button(rect, priority.ToString());
+        GUI.Button(new Rect(end.x - 20, end.y + end.height / 2 - 10, 20, 20), ">");
     }
 
 }
