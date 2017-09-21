@@ -68,6 +68,11 @@ public class StateMachineWindow : EditorWindow {
 
     void DrawNodeWindow(int id)
     {
+        //Window content goes here
+        GUI.Button(new Rect(25, 15, 20, 20), "-");
+        GUI.Button(new Rect(55, 15, 20, 20), "+");
+        //GUI.Button(rect, id.ToString());
+        //GUI.Button(new Rect(end.x - 20, end.y + end.height / 2 - 10, 20, 20), ">");
         GUI.DragWindow();
     }
 
