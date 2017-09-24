@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,6 +13,8 @@ public class StateMachineWindow : EditorWindow {
     private int windowWidth = 100;
     private int windowHeight = 20;
     private bool init = false;
+    private GenericMenu menu;
+    private string PLAYER_STATE_CLASSES_PATH = "Assets/Scripts/States/Player";
 
     [MenuItem("Window/State Machine")]
     public static void ShowWindow()
@@ -17,43 +22,62 @@ public class StateMachineWindow : EditorWindow {
         GetWindow<StateMachineWindow>().Init();
     }
 
-    public void Init()
+    private void Update()
     {
+        
+    }
+
+    public void Init()
+    {       
+
         states = new List<State>();
         stateBoxes = new List<Rect>();
         selectedObject = Selection.activeGameObject;
-
         if (selectedObject)
         {
-            Debug.Log(selectedObject.name);
             states.AddRange(selectedObject.GetComponents<State>());
-            Debug.Log("Number of states: " + states.Count);
             for(int i = 0; i < states.Count; i++)
             {
-                Rect rect = new Rect(100 + (2 * windowWidth * i), 50, windowWidth, windowHeight + windowHeight * states[i].UpdateConditions.Count);
+                int count = 1;
+                if (states[i].UpdateConditions != null && states[i].UpdateConditions.Count > 0)
+                {
+                    count = states[i].UpdateConditions.Count;
+                }
+                Rect rect = new Rect(100 + (2 * windowWidth * i), 50, windowWidth, windowHeight + windowHeight * count);
                 stateBoxes.Add(rect);
             }
-            init = true;
+            init = true;            
         }
+        CreateContextMenu();
+        Repaint();
     }
 
     private void OnSelectionChange()
     {
         Init();
     }
-
+    
     private void OnGUI()
-    {
+    {       
+        Event current = Event.current;
+        if (current.type == EventType.ContextClick)
+        {
+            menu.ShowAsContext();
+            current.Use();
+        }
+
         if (init)
         {
             //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows
             for (int i = 0; i < states.Count; i++)
             {
                 List<TransitionUnit> transitions = states[i].UpdateConditions;
-
-                foreach (TransitionUnit transition in transitions)
+                if (transitions != null)
                 {
-                    DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                    foreach (TransitionUnit transition in transitions)
+                    {
+                        DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                    }
                 }
             }
 
@@ -64,15 +88,20 @@ public class StateMachineWindow : EditorWindow {
             }
             EndWindows();
         }
+        
     }
 
     void DrawNodeWindow(int id)
     {
         //Window content goes here
-        GUI.Button(new Rect(25, 15, 20, 20), "-");
-        GUI.Button(new Rect(55, 15, 20, 20), "+");
-        //GUI.Button(rect, id.ToString());
-        //GUI.Button(new Rect(end.x - 20, end.y + end.height / 2 - 10, 20, 20), ">");
+        if(GUI.Button(new Rect(25, 15, 20, 20), "-"))
+        {
+
+        }
+        if(GUI.Button(new Rect(55, 15, 20, 20), "+"))
+        {
+
+        }
         GUI.DragWindow();
     }
 
@@ -93,4 +122,35 @@ public class StateMachineWindow : EditorWindow {
         GUI.Button(new Rect(end.x - 20, end.y + end.height / 2 - 10, 20, 20), ">");
     }
 
+    private void CreateContextMenu()
+    {
+        if (menu == null)
+        {
+            menu = new GenericMenu();
+            menu.AddDisabledItem(new GUIContent("States"));
+            AddPlayerStates();
+            menu.AddSeparator("");
+        }
+    }
+
+    private void AddPlayerStates()
+    {
+        string[] playerStates = Directory.GetFiles(PLAYER_STATE_CLASSES_PATH,"*.cs");
+        for (int i = 0; i < playerStates.Length; i++) {
+            string classFileName = playerStates[i].Split('\\')[1];
+            string className = classFileName.Replace(".cs", "");
+            menu.AddItem(new GUIContent("Player/" + className), false, AddState, className);
+        }
+    }
+
+    private void AddState(object stateType)
+    {
+        String className = stateType as string;
+        Type type = Type.GetType(className + ",Assembly-CSharp");
+        if (type != null)
+        {
+            selectedObject.AddComponent(type);
+        }
+        Init();
+    }
 }
