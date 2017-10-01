@@ -5,13 +5,15 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-public class StateMachineWindow : EditorWindow {
+public partial class StateMachineWindow : EditorWindow {
 
     private GameObject selectedObject;
     private List<State> states;
     private List<Rect> stateBoxes;
     private int windowWidth = 100;
     private int windowHeight = 20;
+    private float buttonWidth = 20;
+    private float buttonHeight = 20;
     private bool init = false;
     private GenericMenu menu;
     private string PLAYER_STATE_CLASSES_PATH = "Assets/Scripts/States/Player";
@@ -39,9 +41,9 @@ public class StateMachineWindow : EditorWindow {
             for(int i = 0; i < states.Count; i++)
             {
                 int count = 1;
-                if (states[i].UpdateConditions != null && states[i].UpdateConditions.Count > 0)
+                if (states[i].transitions != null && states[i].transitions.Count > 0)
                 {
-                    count = states[i].UpdateConditions.Count;
+                    count = states[i].transitions.Count;
                 }
                 Rect rect = new Rect(100 + (2 * windowWidth * i), 50, windowWidth, windowHeight + windowHeight * count);
                 stateBoxes.Add(rect);
@@ -60,10 +62,10 @@ public class StateMachineWindow : EditorWindow {
     private void OnGUI()
     {       
         Event current = Event.current;
-        if (current.type == EventType.ContextClick)
+        if (Event.current.type == EventType.ContextClick)
         {
+            Event.current.Use();
             menu.ShowAsContext();
-            current.Use();
         }
 
         if (init)
@@ -71,12 +73,15 @@ public class StateMachineWindow : EditorWindow {
             //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows
             for (int i = 0; i < states.Count; i++)
             {
-                List<TransitionUnit> transitions = states[i].UpdateConditions;
+                List<TransitionUnit> transitions = states[i].transitions;
                 if (transitions != null)
                 {
                     foreach (TransitionUnit transition in transitions)
                     {
-                        DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                        if (transition.state != null && transition.condition != null)
+                        {
+                            DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                        }
                     }
                 }
             }
@@ -84,26 +89,14 @@ public class StateMachineWindow : EditorWindow {
             BeginWindows();
             for (int i = 0; i < stateBoxes.Count; i++)
             {
-                stateBoxes[i] = GUI.Window(i, stateBoxes[i], DrawNodeWindow, states[i].GetType().Name);
+                stateBoxes[i] = GUI.Window(i, stateBoxes[i], DrawStateWindow, states[i].GetType().Name);
             }
             EndWindows();
         }
         
     }
 
-    void DrawNodeWindow(int id)
-    {
-        //Window content goes here
-        if(GUI.Button(new Rect(25, 15, 20, 20), "-"))
-        {
-
-        }
-        if(GUI.Button(new Rect(55, 15, 20, 20), "+"))
-        {
-
-        }
-        GUI.DragWindow();
-    }
+    
 
     void DrawNodeCurve(Rect start, Rect end, int totalStates, int priority)
     {
