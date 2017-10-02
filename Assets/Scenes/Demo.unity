@@ -168,7 +168,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754e7ae24788c8643920bf8f659b47d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  transitions: []
+  transitions:
+  - condition: {fileID: 11400000, guid: 53c4089eec064ee438d5743461dee7d9, type: 2}
+    state: {fileID: 0}
+    checkNegative: 0
+    priority: 0
+  - condition: {fileID: 0}
+    state: {fileID: 0}
+    checkNegative: 0
+    priority: 1
+  - condition: {fileID: 0}
+    state: {fileID: 0}
+    checkNegative: 0
+    priority: 2
+  - condition: {fileID: 0}
+    state: {fileID: 0}
+    checkNegative: 0
+    priority: 3
   effects: []
   overLapSphereRadius: 0
   collider: {fileID: 0}

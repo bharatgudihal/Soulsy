@@ -10,13 +10,13 @@ public partial class StateMachineWindow : EditorWindow {
     private GameObject selectedObject;
     private List<State> states;
     private List<Rect> stateBoxes;
-    private int windowWidth = 100;
-    private int windowHeight = 20;
-    private float buttonWidth = 20;
-    private float buttonHeight = 20;
+    private int stateWindowWidth = 200;
+    private int stateWindowHeight = 20;
+    
     private bool init = false;
     private GenericMenu menu;
     private string PLAYER_STATE_CLASSES_PATH = "Assets/Scripts/States/Player";
+    private Vector2 contextMenuClickLocation;
 
     [MenuItem("Window/State Machine")]
     public static void ShowWindow()
@@ -40,18 +40,24 @@ public partial class StateMachineWindow : EditorWindow {
             states.AddRange(selectedObject.GetComponents<State>());
             for(int i = 0; i < states.Count; i++)
             {
-                int count = 1;
-                if (states[i].transitions != null && states[i].transitions.Count > 0)
-                {
-                    count = states[i].transitions.Count;
-                }
-                Rect rect = new Rect(100 + (2 * windowWidth * i), 50, windowWidth, windowHeight + windowHeight * count);
-                stateBoxes.Add(rect);
+                CreateStateBoxAndAddToList(i);
+
             }
             init = true;            
         }
         CreateContextMenu();
         Repaint();
+    }
+    
+    private void CreateStateBoxAndAddToList(int i)
+    {
+        int count = 1;
+        if (states[i].transitions != null && states[i].transitions.Count > 0)
+        {
+            count += states[i].transitions.Count;
+        }
+        Rect rect = new Rect(100 + (2 * stateWindowWidth * i), 50, stateWindowWidth, stateWindowHeight + stateWindowHeight * count);
+        stateBoxes.Add(rect);
     }
 
     private void OnSelectionChange()
@@ -65,12 +71,15 @@ public partial class StateMachineWindow : EditorWindow {
         if (Event.current.type == EventType.ContextClick)
         {
             Event.current.Use();
-            menu.ShowAsContext();
+            if (menu != null)
+            {
+                menu.ShowAsContext();
+                contextMenuClickLocation = Event.current.mousePosition;
+            }
         }
 
         if (init)
         {
-            //DrawNodeCurve(window1, window2); // Here the curve is drawn under the windows
             for (int i = 0; i < states.Count; i++)
             {
                 List<TransitionUnit> transitions = states[i].transitions;
@@ -79,8 +88,8 @@ public partial class StateMachineWindow : EditorWindow {
                     foreach (TransitionUnit transition in transitions)
                     {
                         if (transition.state != null && transition.condition != null)
-                        {
-                            DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
+                        {                            
+                            //DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
                         }
                     }
                 }
@@ -95,8 +104,6 @@ public partial class StateMachineWindow : EditorWindow {
         }
         
     }
-
-    
 
     void DrawNodeCurve(Rect start, Rect end, int totalStates, int priority)
     {
@@ -144,6 +151,12 @@ public partial class StateMachineWindow : EditorWindow {
         {
             selectedObject.AddComponent(type);
         }
-        Init();
+        states.Clear();
+        states.AddRange(selectedObject.GetComponents<State>());
+        int lastIndex = states.Count - 1;
+        CreateStateBoxAndAddToList(states.Count - 1);
+        Rect stateBox = stateBoxes[lastIndex];
+        stateBox.position = contextMenuClickLocation;
+        stateBoxes[lastIndex] = stateBox;
     }
 }

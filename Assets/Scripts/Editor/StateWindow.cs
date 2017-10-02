@@ -5,40 +5,80 @@ using UnityEngine;
 
 public partial class StateMachineWindow {
 
+    private int buttonWidth = 100;
+    private int buttonHeight = 20;
+    private int conditionSocketHeight = 20;
+    private int conditionSocketTopPadding = 20;
+
     void DrawStateWindow(int id)
     {
-        //Window content goes here
-        float windowWidth = stateBoxes[id].width;
-        float windowHeight = stateBoxes[id].height;
+        //Window content goes here        
+        State state = states[id];
+        Rect stateBox = stateBoxes[id];
+        float windowWidth = stateBox.width;
+        float windowHeight = stateBox.height;        
         
-
-        if (GUI.Button(new Rect((windowWidth / 2), windowHeight - buttonHeight, buttonWidth, buttonHeight), "+"))
-        {
-            AddCondition(id);
-        }
-
-        if (GUI.Button(new Rect((windowWidth / 2) - buttonWidth, windowHeight - buttonHeight, buttonWidth, buttonHeight), "-"))
-        {
-            
-        }
-
-        GUI.DragWindow();    
-        
+        //Delete state
         if (Event.current.isKey && Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Delete)
         {
-            Event.current.Use();
-            State stateToRemove = states[id];
+            Event.current.Use();            
             states.RemoveAt(id);
             stateBoxes.RemoveAt(id);
-            DestroyImmediate(stateToRemove);
+            DestroyImmediate(state);
+            return;
+        }
+
+        //Draw condition sockets
+        DrawConditionSockets(state, stateBox);
+
+        // Draw buttons
+        if (GUI.Button(new Rect((windowWidth / 2) - (buttonWidth/2), windowHeight - buttonHeight, buttonWidth, buttonHeight), "Add Condition"))
+        {
+            ResizeStateWindow(ref stateBox);
+            AddCondition(state);
+            stateBoxes[id] = stateBox;
+        }
+
+        GUI.DragWindow();
+    }
+
+    private void ResizeStateWindow(ref Rect stateBox)
+    {
+        stateBox.height += buttonHeight;
+    }
+
+    private void DrawConditionSockets(State state, Rect stateBox)
+    {
+        float conditionSocketWidth = stateBox.width;
+        if (state.transitions != null)
+        {
+            foreach (TransitionUnit transition in state.transitions)
+            {
+                float x = 0f;
+                float y = conditionSocketTopPadding + transition.priority * conditionSocketHeight;
+                Rect conditionSocketRect = new Rect(x, y, conditionSocketWidth, conditionSocketHeight);
+                string conditionName = "None";
+                if (transition.condition)
+                {
+                    conditionName = transition.condition.name;
+                }
+                GUIStyle style = new GUIStyle();
+                if(GUI.Button(conditionSocketRect, conditionName))
+                {
+
+                }
+            }
         }
     }
 
-    private void AddCondition(int id)
+    private void AddCondition(State state)
     {
-        Debug.Log("clicked");
         TransitionUnit newTransition = new TransitionUnit();
-        newTransition.priority = states[id].transitions.Count;
-        states[id].transitions.Add(newTransition);
+        if (state.transitions == null)
+        {
+            state.transitions = new List<TransitionUnit>();
+        }
+        newTransition.priority = state.transitions.Count;
+        state.transitions.Add(newTransition);
     }
 }
