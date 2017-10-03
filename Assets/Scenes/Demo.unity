@@ -152,42 +152,6 @@ Prefab:
     - {fileID: 114192113833265042, guid: 0f25ef94996d23745b0d8383421a6c4a, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 0f25ef94996d23745b0d8383421a6c4a, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1603018075 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1786484274459280, guid: 0f25ef94996d23745b0d8383421a6c4a,
-    type: 2}
-  m_PrefabInternal: {fileID: 1200222278}
---- !u!114 &1603018076
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1603018075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 754e7ae24788c8643920bf8f659b47d5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transitions:
-  - condition: {fileID: 11400000, guid: 53c4089eec064ee438d5743461dee7d9, type: 2}
-    state: {fileID: 0}
-    checkNegative: 0
-    priority: 0
-  - condition: {fileID: 0}
-    state: {fileID: 0}
-    checkNegative: 0
-    priority: 1
-  - condition: {fileID: 0}
-    state: {fileID: 0}
-    checkNegative: 0
-    priority: 2
-  - condition: {fileID: 0}
-    state: {fileID: 0}
-    checkNegative: 0
-    priority: 3
-  effects: []
-  overLapSphereRadius: 0
-  collider: {fileID: 0}
 --- !u!1 &1752728762
 GameObject:
   m_ObjectHideFlags: 0

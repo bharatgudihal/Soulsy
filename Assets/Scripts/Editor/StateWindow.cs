@@ -62,13 +62,21 @@ public partial class StateMachineWindow {
                 {
                     conditionName = transition.condition.name;
                 }
-                GUIStyle style = new GUIStyle();
+
                 if(GUI.Button(conditionSocketRect, conditionName))
                 {
-
+                    if (!conditionName.Equals("None"))
+                    {
+                        ShowConditionMenu(transition);
+                    }
                 }
             }
         }
+    }
+
+    private void ShowConditionMenu(TransitionUnit transition)
+    {
+        throw new NotImplementedException();
     }
 
     private void AddCondition(State state)
