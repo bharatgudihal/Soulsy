@@ -21,12 +21,12 @@ public partial class StateMachineWindow : EditorWindow {
     [MenuItem("Window/State Machine")]
     public static void ShowWindow()
     {
-        GetWindow<StateMachineWindow>().Init();
+        GetWindow<StateMachineWindow>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        
+        Init();
     }
 
     public void Init()
@@ -100,9 +100,13 @@ public partial class StateMachineWindow : EditorWindow {
             {
                 stateBoxes[i] = GUI.Window(i, stateBoxes[i], DrawStateWindow, states[i].GetType().Name);
             }
-            EndWindows();
-        }
-        
+
+            if (selectedStateIndex > -1 && selectedTransitionIndex > -1)
+            {
+                GUI.Window(stateBoxes.Count, new Rect(position.width * 0.8f, 0, position.width * 0.2f, position.height), DrawTransitionWindow, "Transition Properties");
+            }
+            EndWindows();            
+        }        
     }
 
     void DrawNodeCurve(Rect start, Rect end, int totalStates, int priority)

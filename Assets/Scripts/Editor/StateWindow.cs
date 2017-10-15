@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public partial class StateMachineWindow {
@@ -9,6 +10,9 @@ public partial class StateMachineWindow {
     private int buttonHeight = 20;
     private int conditionSocketHeight = 20;
     private int conditionSocketTopPadding = 20;
+
+    private int selectedStateIndex = -1;
+    private int selectedTransitionIndex = -1;
 
     void DrawStateWindow(int id)
     {
@@ -32,7 +36,7 @@ public partial class StateMachineWindow {
         DrawConditionSockets(state, stateBox);
 
         // Draw buttons
-        if (GUI.Button(new Rect((windowWidth / 2) - (buttonWidth/2), windowHeight - buttonHeight, buttonWidth, buttonHeight), "Add Condition"))
+        if (GUI.Button(new Rect((windowWidth / 2) - (buttonWidth / 2), windowHeight - buttonHeight, buttonWidth, buttonHeight), "Add Transition"))
         {
             ResizeStateWindow(ref stateBox);
             AddCondition(state);
@@ -52,8 +56,10 @@ public partial class StateMachineWindow {
         float conditionSocketWidth = stateBox.width;
         if (state.transitions != null)
         {
-            foreach (TransitionUnit transition in state.transitions)
+            
+            for (int i = 0; i < state.transitions.Count; i++)
             {
+                TransitionUnit transition = state.transitions[i];
                 float x = 0f;
                 float y = conditionSocketTopPadding + transition.priority * conditionSocketHeight;
                 Rect conditionSocketRect = new Rect(x, y, conditionSocketWidth, conditionSocketHeight);
@@ -63,20 +69,14 @@ public partial class StateMachineWindow {
                     conditionName = transition.condition.name;
                 }
 
-                if(GUI.Button(conditionSocketRect, conditionName))
+                if (GUI.Button(conditionSocketRect, conditionName))
                 {
-                    if (!conditionName.Equals("None"))
-                    {
-                        ShowConditionMenu(transition);
-                    }
+                    //Show condition menu
+                    selectedStateIndex = states.IndexOf(state);
+                    selectedTransitionIndex = i;
                 }
             }
         }
-    }
-
-    private void ShowConditionMenu(TransitionUnit transition)
-    {
-        throw new NotImplementedException();
     }
 
     private void AddCondition(State state)
