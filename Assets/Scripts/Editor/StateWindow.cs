@@ -11,6 +11,9 @@ public partial class StateMachineWindow {
     private int conditionSocketHeight = 20;
     private int conditionSocketTopPadding = 20;
 
+    private int inOutButtonWidth = 20;
+    private int inOutButtonHeight = 20;
+
     private int selectedStateIndex = -1;
     private int selectedTransitionIndex = -1;
 
@@ -53,14 +56,14 @@ public partial class StateMachineWindow {
 
     private void DrawConditionSockets(State state, Rect stateBox)
     {
-        float conditionSocketWidth = stateBox.width;
+        float conditionSocketWidth = stateBox.width - inOutButtonWidth * 2;
         if (state.transitions != null)
         {
             
             for (int i = 0; i < state.transitions.Count; i++)
             {
                 TransitionUnit transition = state.transitions[i];
-                float x = 0f;
+                float x = inOutButtonWidth;
                 float y = conditionSocketTopPadding + transition.priority * conditionSocketHeight;
                 Rect conditionSocketRect = new Rect(x, y, conditionSocketWidth, conditionSocketHeight);
                 string conditionName = "None";
@@ -74,6 +77,27 @@ public partial class StateMachineWindow {
                     //Show condition menu
                     selectedStateIndex = states.IndexOf(state);
                     selectedTransitionIndex = i;
+                }
+
+
+                Rect outButtonRect = conditionSocketRect;
+                outButtonRect.width = inOutButtonWidth;
+                outButtonRect.height = inOutButtonHeight;
+                outButtonRect.x = inOutButtonWidth + conditionSocketWidth;
+                //Out Button
+                if (GUI.Button(outButtonRect, ">"))
+                {
+
+                }
+
+                Rect inButtonRect = conditionSocketRect;
+                inButtonRect.width = inOutButtonWidth;
+                inButtonRect.height = inOutButtonHeight;
+                inButtonRect.x -= inOutButtonWidth;
+                //Out Button
+                if (GUI.Button(inButtonRect, ">"))
+                {
+
                 }
             }
         }
