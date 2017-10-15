@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System;
 
 public partial class StateMachineWindow
 {
@@ -9,7 +10,7 @@ public partial class StateMachineWindow
     private void DrawTransitionWindow(int id)
     {
         State selectedState = states[selectedStateIndex];
-        TransitionUnit transition = selectedState.transitions[selectedTransitionIndex];
+        TransitionUnit selectedTransition = selectedState.transitions[selectedTransitionIndex];
 
         GUIStyle guiStyle = new GUIStyle();
         guiStyle.alignment = TextAnchor.MiddleCenter;
@@ -20,12 +21,29 @@ public partial class StateMachineWindow
 
         GUILayout.Label("Condition");
         GUILayout.Space(5);
-        transition.condition = EditorGUILayout.ObjectField(transition.condition, typeof(Condition), false) as Condition;
+        selectedTransition.condition = EditorGUILayout.ObjectField(selectedTransition.condition, typeof(Condition), false) as Condition;
 
         GUILayout.Space(20);
 
         //GUILayout.Label("Check Negative");
-        transition.checkNegative = GUILayout.Toggle(transition.checkNegative, "Check Negative");
+        selectedTransition.checkNegative = GUILayout.Toggle(selectedTransition.checkNegative, "Check Negative");
+
+        GUILayout.Space(20);
+
+        //Delete Button
+        if (GUILayout.Button("Delete"))
+        {
+            selectedState.transitions.Remove(selectedTransition);
+            RecalculateStateBoxRect();
+            selectedStateIndex = -1;
+            selectedTransitionIndex = -1;            
+        }
     }
 
+    private void RecalculateStateBoxRect()
+    {
+        Rect stateBox = stateBoxes[selectedStateIndex];
+        stateBox.height -= stateWindowHeight;
+        stateBoxes[selectedStateIndex] = stateBox;
+    }
 }

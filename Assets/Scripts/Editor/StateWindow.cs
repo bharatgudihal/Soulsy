@@ -28,7 +28,12 @@ public partial class StateMachineWindow {
         //Delete state
         if (Event.current.isKey && Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Delete)
         {
-            Event.current.Use();            
+            Event.current.Use();
+            if(id == selectedStateIndex)
+            {
+                selectedStateIndex = -1;
+                selectedTransitionIndex = -1;
+            }
             states.RemoveAt(id);
             stateBoxes.RemoveAt(id);
             DestroyImmediate(state);
@@ -64,7 +69,7 @@ public partial class StateMachineWindow {
             {
                 TransitionUnit transition = state.transitions[i];
                 float x = inOutButtonWidth;
-                float y = conditionSocketTopPadding + transition.priority * conditionSocketHeight;
+                float y = conditionSocketTopPadding + i * conditionSocketHeight;
                 Rect conditionSocketRect = new Rect(x, y, conditionSocketWidth, conditionSocketHeight);
                 string conditionName = "None";
                 if (transition.condition)

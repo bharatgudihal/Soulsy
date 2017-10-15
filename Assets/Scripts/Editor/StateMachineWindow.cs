@@ -30,8 +30,7 @@ public partial class StateMachineWindow : EditorWindow {
     }
 
     public void Init()
-    {       
-
+    {
         states = new List<State>();
         stateBoxes = new List<Rect>();
         selectedObject = Selection.activeGameObject;
@@ -41,7 +40,6 @@ public partial class StateMachineWindow : EditorWindow {
             for(int i = 0; i < states.Count; i++)
             {
                 CreateStateBoxAndAddToList(i);
-
             }
             init = true;            
         }
