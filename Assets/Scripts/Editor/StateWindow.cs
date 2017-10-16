@@ -20,10 +20,10 @@ public partial class StateMachineWindow {
     void DrawStateWindow(int id)
     {
         //Window content goes here        
-        State state = states[id];
-        Rect stateBox = stateBoxes[id];
-        float windowWidth = stateBox.width;
-        float windowHeight = stateBox.height;        
+        State thisState = states[id];
+        Rect thisStateBox = stateBoxes[id];
+        float windowWidth = thisStateBox.width;
+        float windowHeight = thisStateBox.height;        
         
         //Delete state
         if (Event.current.isKey && Event.current.type == EventType.KeyUp && Event.current.keyCode == KeyCode.Delete)
@@ -36,19 +36,43 @@ public partial class StateMachineWindow {
             }
             states.RemoveAt(id);
             stateBoxes.RemoveAt(id);
-            DestroyImmediate(state);
+            DestroyImmediate(thisState);
             return;
         }
 
+        Rect inButtonRect = new Rect();
+        inButtonRect.width = inOutButtonWidth;
+        inButtonRect.height = inOutButtonHeight;
+        inButtonRect.x = 0;
+        inButtonRect.y = stateWindowHeight;
+
+        //In Button
+        if (GUI.Button(inButtonRect, ">"))
+        {
+            if (isConnecting)
+            {
+                if (selectedStateIndex > -1 && selectedTransitionIndex > -1)
+                {
+                    State selectedState = states[selectedStateIndex];
+                    if (selectedState != thisState)
+                    {
+                        TransitionUnit transitionUnit = selectedState.transitions[selectedTransitionIndex];
+                        transitionUnit.state = thisState;
+                        isConnecting = false;
+                    }
+                }
+            }
+        }
+
         //Draw condition sockets
-        DrawConditionSockets(state, stateBox);
+        DrawConditionSockets(thisState, thisStateBox);
 
         // Draw buttons
         if (GUI.Button(new Rect((windowWidth / 2) - (buttonWidth / 2), windowHeight - buttonHeight, buttonWidth, buttonHeight), "Add Transition"))
         {
-            ResizeStateWindow(ref stateBox);
-            AddCondition(state);
-            stateBoxes[id] = stateBox;
+            ResizeStateWindow(ref thisStateBox);
+            AddCondition(thisState);
+            stateBoxes[id] = thisStateBox;
         }
 
         GUI.DragWindow();
@@ -59,17 +83,17 @@ public partial class StateMachineWindow {
         stateBox.height += buttonHeight;
     }
 
-    private void DrawConditionSockets(State state, Rect stateBox)
+    private void DrawConditionSockets(State thisState, Rect thisStateBox)
     {
-        float conditionSocketWidth = stateBox.width - inOutButtonWidth * 2;
-        if (state.transitions != null)
+        float conditionSocketWidth = thisStateBox.width - inOutButtonWidth;
+        if (thisState.transitions != null)
         {
             
-            for (int i = 0; i < state.transitions.Count; i++)
-            {
-                TransitionUnit transition = state.transitions[i];
-                float x = inOutButtonWidth;
-                float y = conditionSocketTopPadding + i * conditionSocketHeight;
+            for (int i = 0; i < thisState.transitions.Count; i++)
+            {               
+                TransitionUnit transition = thisState.transitions[i];
+                float x = 0;
+                float y = inOutButtonHeight + conditionSocketTopPadding + i * conditionSocketHeight;
                 Rect conditionSocketRect = new Rect(x, y, conditionSocketWidth, conditionSocketHeight);
                 string conditionName = "None";
                 if (transition.condition)
@@ -80,7 +104,7 @@ public partial class StateMachineWindow {
                 if (GUI.Button(conditionSocketRect, conditionName))
                 {
                     //Show condition menu
-                    selectedStateIndex = states.IndexOf(state);
+                    selectedStateIndex = states.IndexOf(thisState);
                     selectedTransitionIndex = i;
                 }
 
@@ -88,23 +112,36 @@ public partial class StateMachineWindow {
                 Rect outButtonRect = conditionSocketRect;
                 outButtonRect.width = inOutButtonWidth;
                 outButtonRect.height = inOutButtonHeight;
-                outButtonRect.x = inOutButtonWidth + conditionSocketWidth;
+                outButtonRect.x = conditionSocketWidth;
+
                 //Out Button
                 if (GUI.Button(outButtonRect, ">"))
                 {
-
-                }
-
-                Rect inButtonRect = conditionSocketRect;
-                inButtonRect.width = inOutButtonWidth;
-                inButtonRect.height = inOutButtonHeight;
-                inButtonRect.x -= inOutButtonWidth;
-                //Out Button
-                if (GUI.Button(inButtonRect, ">"))
-                {
-
+                    isConnecting = true;
+                    connectionStart = thisStateBox.position;
+                    connectionStart.x += thisStateBox.width;
+                    connectionStart.y += outButtonRect.y + outButtonRect.height / 2f;
+                    selectedStateIndex = states.IndexOf(thisState);
+                    selectedTransitionIndex = i;
+                    transition.state = null;
                 }
             }
+        }
+    }
+
+    private void DrawTransitionConnection(Rect thisStateBox, int transitionIndex, TransitionUnit transitionUnit)
+    {
+        if (transitionUnit.state)
+        {
+            Vector2 startPosition = new Vector2();
+            startPosition.x = thisStateBox.x + thisStateBox.width;
+            float yOffest = inOutButtonHeight + conditionSocketTopPadding + transitionIndex * conditionSocketHeight + conditionSocketHeight / 2f;
+            startPosition.y = thisStateBox.y + yOffest;
+            Vector2 endPosition = new Vector2();
+            Rect targetStateBox = stateBoxes[states.IndexOf(transitionUnit.state)];
+            endPosition.x = targetStateBox.x;
+            endPosition.y = targetStateBox.y + stateWindowHeight + inOutButtonHeight / 2f;
+            DrawCurve(startPosition, endPosition);
         }
     }
 

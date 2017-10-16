@@ -18,6 +18,9 @@ public partial class StateMachineWindow : EditorWindow {
     private string PLAYER_STATE_CLASSES_PATH = "Assets/Scripts/States/Player";
     private Vector2 contextMenuClickLocation;
 
+    private bool isConnecting;
+    private Vector3 connectionStart;
+
     [MenuItem("Window/State Machine")]
     public static void ShowWindow()
     {
@@ -25,6 +28,11 @@ public partial class StateMachineWindow : EditorWindow {
     }
 
     private void OnEnable()
+    {
+        Init();
+    }
+
+    private void OnFocus()
     {
         Init();
     }
@@ -44,6 +52,7 @@ public partial class StateMachineWindow : EditorWindow {
             init = true;            
         }
         CreateContextMenu();
+        isConnecting = false;
         Repaint();
     }
     
@@ -54,7 +63,7 @@ public partial class StateMachineWindow : EditorWindow {
         {
             count += states[i].transitions.Count;
         }
-        Rect rect = new Rect(100 + (2 * stateWindowWidth * i), 50, stateWindowWidth, stateWindowHeight + stateWindowHeight * count);
+        Rect rect = new Rect(100 + (2 * stateWindowWidth * i), 50, stateWindowWidth, stateWindowHeight * 2 + stateWindowHeight * count);
         stateBoxes.Add(rect);
     }
 
@@ -78,20 +87,7 @@ public partial class StateMachineWindow : EditorWindow {
 
         if (init)
         {
-            for (int i = 0; i < states.Count; i++)
-            {
-                List<TransitionUnit> transitions = states[i].transitions;
-                if (transitions != null)
-                {
-                    foreach (TransitionUnit transition in transitions)
-                    {
-                        if (transition.state != null && transition.condition != null)
-                        {                            
-                            //DrawNodeCurve(stateBoxes[i], stateBoxes[states.IndexOf(transition.state)], transitions.Count, transition.priority);
-                        }
-                    }
-                }
-            }
+            
 
             BeginWindows();
             for (int i = 0; i < stateBoxes.Count; i++)
@@ -103,8 +99,45 @@ public partial class StateMachineWindow : EditorWindow {
             {
                 GUI.Window(stateBoxes.Count, new Rect(position.width * 0.8f, 0, position.width * 0.2f, position.height), DrawTransitionWindow, "Transition Properties");
             }
-            EndWindows();            
+            EndWindows();
+
+            Handles.BeginGUI();
+            DrawTransitionConnections();
+            DrawConnection();
+            Handles.EndGUI();
+
+            if (Event.current.type == EventType.MouseDown)
+            {
+                Event.current.Use();
+                isConnecting = false;
+            }
         }        
+    }
+
+    private void DrawTransitionConnections()
+    {
+        for (int i = 0; i < states.Count; i++)
+        {
+            State thisState = states[i];
+            Rect thisStateBox = stateBoxes[i];
+            if (thisState.transitions != null)
+            {
+                for (int j = 0; j < thisState.transitions.Count; j++)
+                {
+                    TransitionUnit thisTransitionUnit = thisState.transitions[j];
+                    DrawTransitionConnection(thisStateBox, j, thisTransitionUnit);
+                }
+            }
+        }
+    }
+
+    private void DrawConnection()
+    {
+        if (isConnecting)
+        {
+            DrawCurve(connectionStart, Event.current.mousePosition);
+            Repaint();
+        }
     }
 
     void DrawNodeCurve(Rect start, Rect end, int totalStates, int priority)
@@ -114,14 +147,20 @@ public partial class StateMachineWindow : EditorWindow {
         Vector3 startPos = new Vector3(rect.x + rect.width, rect.y + rect.height/2, 0);
         Vector3 endPos = new Vector3(end.x, end.y + end.height/2, 0);
         
-        Vector3 startTan = startPos + Vector3.right * 50;
-        Vector3 endTan = endPos + Vector3.left * 50;
-        Color shadowCol = new Color(0, 0, 0, 0.06f);
-        for (int i = 0; i < 3; i++) // Draw a shadow
-            Handles.DrawBezier(startPos, endPos, startTan, endTan, shadowCol, null, (i + 1) * 5);
-        Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, null, 1);
+        DrawCurve(startPos, endPos);
+
         GUI.Button(rect, priority.ToString());
         GUI.Button(new Rect(end.x - 20, end.y + end.height / 2 - 10, 20, 20), ">");
+    }
+
+    private void DrawCurve(Vector3 startPosition, Vector3 endPosition)
+    {
+        Vector3 startTan = startPosition + Vector3.right * 50;
+        Vector3 endTan = endPosition + Vector3.left * 50;
+        Color shadowCol = new Color(0, 0, 0, 0.06f);
+        for (int i = 0; i < 3; i++) // Draw a shadow
+            Handles.DrawBezier(startPosition, endPosition, startTan, endTan, shadowCol, null, (i + 1) * 5);
+        Handles.DrawBezier(startPosition, endPosition, startTan, endTan, Color.black, null, 1);
     }
 
     private void CreateContextMenu()
